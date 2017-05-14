@@ -121,19 +121,31 @@ class Pagination{
         // update button group text
         if ( this.btnGpElement ){
             this.btnGpElement.querySelector('.pg-state').innerHTML = `${this.state.currPage + 1} of ${this.currPageCount}`;
+
+            if(this.state.currPage === 0) {
+                this.btnGpElement.querySelector('.pg-prev-btn').classList.add('disabled');
+            } else {
+                this.btnGpElement.querySelector('.pg-prev-btn').classList.remove('disabled');
+            }
+            if(this.state.currPage === this.currPageCount - 1) {
+                this.btnGpElement.querySelector('.pg-next-btn').classList.add('disabled');
+            } else {
+                this.btnGpElement.querySelector('.pg-next-btn').classList.remove('disabled');
+            }
         }
     }
 }
 
 Pagination.defaultOpts = {
             el: '#pg-root',
+            renderFn: null,
+            sortFn: null,
             btnGpEl: '#pg-ctrl',
             interval: 5,
             limit: 5,
             prevBtnHtml: '<',
-            nextBtnHtml: '>'
+            nextBtnHtml: '>',
         }
-
 
 
 
