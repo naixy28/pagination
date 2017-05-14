@@ -6,8 +6,8 @@
 </head>
 <body>
     <div id="root">
-        
     </div>
+    <p id="pg-control"></p>
     <script src='pagination.js'></script>
     <script>
     function f( val, index, arr) {
@@ -16,13 +16,21 @@
         return d;
     }
 
+    function s ( prev, next) {
+        console.log();
+        return next - prev;
+    }
+
     var p = new Pagination( {
         el: '#root',
+        btnGpEl: '#pg-control',
         renderFn: f,
-        // sortFn: ''
+        sortFn: s,
+        prevBtnHtml: '<strong>Prev</strong>',
+        nextBtnHtml: '<strong>Next</strong>',
     } );
 
-    p.setState({list: [1,2,3,4,5,6,7,8,9,10,11,12,13] })
+    p.setState({list: [1,2,3,4,5,6,7,8,9,10,11,12,13] });
 </script>
 </body>
 </html>

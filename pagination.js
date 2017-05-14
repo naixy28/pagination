@@ -1,15 +1,54 @@
 class Pagination{
     constructor ( opt ) {
+        if ( !new.target) throw 'Pagination() must be called with new!';
+
+        // merge options
         this.opt = Object.assign( {}, new.target.defaultOpts , opt );
-        this.rtSelector = this.opt.el;
         this.renderFn = this.opt.renderFn;
 
+        // get containers
         this.rtElement = document.querySelector(this.opt.el);
+        this.btnGpElement = document.querySelector(this.opt.btnGpEl);
+        if ( !this.rtElement ) throw 'Must set a root element to place list!';
+
+        // init state
         this.currPageCount = 0;
         this.state = {
             list: [],
             currPage: 0,
         }
+
+        // init button group
+        this.btnGpElement && this.initBtnGroup();
+    }
+
+    initBtnGroup() {
+        const prevBtn = document.createElement('button');
+        prevBtn.innerHTML = this.opt.prevBtnHtml;
+        prevBtn.classList.add( 'pg-prev-btn', 'pg-btn' );
+        prevBtn.addEventListener('click', (e) => {
+            this.prev();
+        })
+
+        const nextBtn = document.createElement('button');
+        nextBtn.innerHTML = this.opt.nextBtnHtml;
+        nextBtn.classList.add( 'pg-next-btn', 'pg-btn' );
+        nextBtn.addEventListener('click', (e) => {
+            this.next();
+        })
+
+        const btnGpContainer = document.createElement('p');
+        btnGpContainer.classList.add('pg-btn-gp');
+
+        btnGpContainer.appendChild(prevBtn);
+        btnGpContainer.appendChild(nextBtn);
+
+        const stateSpan = document.createElement('span');
+        stateSpan.classList.add('pg-state');
+
+        btnGpContainer.insertBefore( stateSpan, nextBtn );
+
+        this.btnGpElement.appendChild(btnGpContainer);
     }
 
     next(){
@@ -49,9 +88,12 @@ class Pagination{
 
     get calList (){
         let currList = Array.from(this.state.list);
-        this.opt.sortFn && this.opt.sortFn.call( this, currList );
-        const range = this.calPageRange();
 
+        // sort 
+        this.opt.sortFn && Array.prototype.sort.call(currList, this.opt.sortFn );
+
+        // get index range
+        const range = this.calPageRange();
         console.log(this.currPageCount, this.state.currPage, range);
 
         currList = currList.filter( (val, index, arr) => {
@@ -65,20 +107,31 @@ class Pagination{
 
     update () {
         this.rtElement.innerHTML = '';
-        const list = this.calList;
-        const dof = document.createDocumentFragment();
 
+        // run getter of calList
+        const list = this.calList;
+
+        // render list
+        const dof = document.createDocumentFragment();
         list.forEach( (val, index, arr) => {
             dof.appendChild( this.renderFn.call( this, val, index, arr ));
         })
-
         this.rtElement.append(dof);
+
+        // update button group text
+        if ( this.btnGpElement ){
+            this.btnGpElement.querySelector('.pg-state').innerHTML = `${this.state.currPage + 1} of ${this.currPageCount}`;
+        }
     }
 }
 
 Pagination.defaultOpts = {
+            el: '#pg-root',
+            btnGpEl: '#pg-ctrl',
             interval: 5,
-            limit: 5
+            limit: 5,
+            prevBtnHtml: '<',
+            nextBtnHtml: '>'
         }
 
 
