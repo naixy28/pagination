@@ -53,7 +53,7 @@ key | type | description |required
 --------- | --------- | ------------- | ----
 `el` | string | container of the list | true
 `renderFn` | function | `renderFn(value: any, index: number, array: any[]): Node` <br/> Function to render each item | true
-`sortFn` | function | `sortFn(prev: any, next: any): boolean` <br/> Function to sort whole list | false
+`sortFn` | function | `sortFn(prev: any, next: any): number` <br/> Function to sort whole list | false
 `btnGpEl` | string | container of button group | false
 `interval` | number | count of items on each page | false
 `limit` | number | not used yet | false
