@@ -64,4 +64,5 @@ key | type | description |required
 * subscribe
 * async render
 * page number buttons
+* modularization
 ...
