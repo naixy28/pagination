@@ -18,6 +18,8 @@ class Pagination{
             currPage: 0,
         }
 
+        this.sc = false;
+
         // init button group
         this.btnGpElement && this.initBtnGroup();
     }
@@ -65,6 +67,9 @@ class Pagination{
 
     setState (opt) {
         this.state = Object.assign({}, this.state, opt);
+        if( !this.state.list ) {
+            this.state.list = [];
+        }
         this.update();
     }
 
@@ -87,14 +92,17 @@ class Pagination{
     }
 
     get calList (){
-        let currList = Array.from(this.state.list);
+        let currList = Array.from(this.state.list || []);
+
+        if( this.sc ) { console.log(this.state.list) };
+
 
         // sort 
         this.opt.sortFn && Array.prototype.sort.call(currList, this.opt.sortFn );
 
         // get index range
         const range = this.calPageRange();
-        console.log(this.currPageCount, this.state.currPage, range);
+        // console.log(this.currPageCount, this.state.currPage, range);
 
         currList = currList.filter( (val, index, arr) => {
             if( index <= range.end && index >= range.start ) {
@@ -120,7 +128,12 @@ class Pagination{
 
         // update button group text
         if ( this.btnGpElement ){
-            this.btnGpElement.querySelector('.pg-state').innerHTML = `${this.state.currPage + 1} of ${this.currPageCount}`;
+            if ( this.state.list.length === 0 ) {
+                // when count = 0, manual fix display
+                this.btnGpElement.querySelector('.pg-state').innerHTML = this.i18n('pageInfoEmpty');;
+            } else {
+                this.btnGpElement.querySelector('.pg-state').innerHTML = this.i18n('pageInfo').replace(/_CURR_/g, this.state.currPage).replace(/_LEN_/g, this.currPageCount);
+            }
 
             if(this.state.currPage === 0) {
                 this.btnGpElement.querySelector('.pg-prev-btn').classList.add('disabled');
@@ -134,6 +147,15 @@ class Pagination{
             }
         }
     }
+
+    subscribe () {
+        this.sc = !this.sc;
+    }
+
+    i18n (key) {
+        let currLan = this.opt.language in this.opt.languageMapping ? this.opt.language : 'en';
+        return this.opt.languageMapping[currLan] && this.opt.languageMapping[currLan][key];
+    }
 }
 
 Pagination.defaultOpts = {
@@ -145,11 +167,15 @@ Pagination.defaultOpts = {
             limit: 5,
             prevBtnHtml: '<',
             nextBtnHtml: '>',
+            languageMapping: {
+                en: {
+                    pageInfoEmpty: 'Page 0 of 1',
+                    pageInfo: 'Page _CURR_ of _LEN_'
+                },
+                zh: {
+                    pageInfoEmpty: '第0页，共1页',
+                    pageInfo: '第_CURR_页，共_LEN_页'
+                }
+            },
+            language: 'en'
         }
-
-
-
-
-
-
-
