@@ -59,10 +59,12 @@ key | type | description |required
 `limit` | number | not used yet | false
 `prevBtnHtml` | HTML string | default to '<' | false
 `nextBtnHtml` | HTML string | default to '>' | false
+`language` | 'en', 'zh' |　default to 'en' | false
 
 ## TODO
 * subscribe
 * async render
 * page number buttons
 * modularization
+* update setstate func
 ...
