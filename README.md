@@ -65,4 +65,5 @@ key | type | description |required
 * async render
 * page number buttons
 * modularization
+* rewrite setState 
 ...
