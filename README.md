@@ -59,6 +59,7 @@ key | type | description |required
 `limit` | number | not used yet | false
 `prevBtnHtml` | HTML string | default to '<' | false
 `nextBtnHtml` | HTML string | default to '>' | false
+`language` | 'en', 'zh' |　default to 'en' | false
 
 ## TODO
 * subscribe
@@ -66,4 +67,5 @@ key | type | description |required
 * page number buttons
 * modularization
 * rewrite setState 
+* update setstate func
 ...
