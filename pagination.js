@@ -132,7 +132,7 @@ class Pagination{
                 // when count = 0, manual fix display
                 this.btnGpElement.querySelector('.pg-state').innerHTML = this.i18n('pageInfoEmpty');
             } else {
-                this.btnGpElement.querySelector('.pg-state').innerHTML = this.i18n('pageInfo').replace(/_CURR_/g, this.state.currPage).replace(/_LEN_/g, this.currPageCount);
+                this.btnGpElement.querySelector('.pg-state').innerHTML = this.i18n('pageInfo').replace( /_CURR_/g, this.state.currPage + 1 ).replace(/_LEN_/g, this.currPageCount);
             }
 
             if(this.state.currPage === 0) {
